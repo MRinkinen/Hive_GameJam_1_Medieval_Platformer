@@ -21,7 +21,10 @@ public class GameManager : MonoBehaviour
     public AudioSource backgroundAudio;
     public AudioClip startAudio;
     public AudioClip gameAudio;
+    public AudioClip gameOverAudio;
+    public AudioClip gameWonAudio;
     bool isGameOn = false;
+
     private void Awake()
     {
         Instance = this;
@@ -44,11 +47,24 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scoreText.text = "Villager unsaved " + score.ToString();
+        scoreText.text = "Infected villagers " + score.ToString();
 
-        if (score == 0)
+        if (score == 0 && isGameOn)
         {
+            backgroundAudio.Stop();
+            backgroundAudio.clip = gameWonAudio;
+            backgroundAudio.Play();
+            isGameOn = false;
             gameWonPanel.SetActive(true);
+            kamera.GetComponent<camera>().isGameStarted = false;
+            player.GetComponent<player_movement>().animator.SetTrigger("gamewon");
+            player.GetComponent<player_movement>().isPlayerAlive = false;
+            Vector3 lookDirection = new Vector3(kamera.transform.position.x, player.transform.position.y, kamera.transform.position.z) - player.transform.position;
+            if (lookDirection != Vector3.zero)
+            {
+                player.GetComponent<player_movement>().playerCharacter.transform.rotation = Quaternion.LookRotation(lookDirection);
+            }
+
             //Time.timeScale = 0;
         }
         if (!isPlayerAlive)
@@ -65,10 +81,10 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("GameScene");
         }
-        {
-            Application.Quit();
-            //SceneManager.LoadScene("Start");
-        }
+        // {
+        //     Application.Quit();
+        //     //SceneManager.LoadScene("Start");
+        // }
         if (Input.GetKeyDown(KeyCode.Space) && !isGameOn)
         {
             isGameOn = true;
@@ -79,6 +95,17 @@ public class GameManager : MonoBehaviour
             startPanel.SetActive(false);
             player.GetComponent<player_movement>().isPlayerAlive = true;
             kamera.GetComponent<camera>().isGameStarted = true;
+        }
+    }
+    public void StopEnemies()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            enemy.GetComponent<enemy>().canMove = false;
+            enemy.GetComponent<Animator>().SetBool("idle", true);
+            Destroy(enemy.GetComponent<CapsuleCollider>());
+            Destroy(enemy.GetComponent<Rigidbody>());
+
         }
     }
 }

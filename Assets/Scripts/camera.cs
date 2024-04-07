@@ -21,7 +21,7 @@ public class camera : MonoBehaviour
     {
         if (isGameStarted)
         {
-            playerSpeed = player.GetComponent<Rigidbody>().velocity.magnitude / 8;
+            playerSpeed = player.GetComponent<Rigidbody>().velocity.magnitude / 7;
             gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, new Vector3(player.position.x, cameraY, cameraZ - playerSpeed), cameraSpeed * Time.deltaTime);
         }
         //gameObject.transform.position = new Vector3(player.position.x, player.position.y + 10, player.position.z - 10);

@@ -29,6 +29,7 @@ public class player_movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         isPlayerAlive = false;
         shootTimer = 0;
         jumpTimer = 0;
@@ -135,6 +136,11 @@ public class player_movement : MonoBehaviour
             animator.SetTrigger("die");
             //animator.SetBool("run", false);
             GameManager.Instance.isPlayerAlive = false;
+            GameManager.Instance.backgroundAudio.Stop();
+            GameManager.Instance.backgroundAudio.loop = false;
+            GameManager.Instance.backgroundAudio.clip = GameManager.Instance.gameOverAudio;
+            GameManager.Instance.backgroundAudio.Play();
+            GameManager.Instance.StopEnemies();
         }
 
     }

@@ -14,6 +14,7 @@ public class enemy : MonoBehaviour
     public AudioClip start;
     public AudioClip die;
     bool playerDetected = false;
+    public GameObject corpseFlame;
 
     // Start is called before the first frame update
     void Start()
@@ -57,8 +58,9 @@ public class enemy : MonoBehaviour
                 animator.SetBool("die", true);
                 Destroy(gameObject.GetComponent<CapsuleCollider>());
                 Destroy(gameObject.GetComponent<Rigidbody>());
-                Destroy(gameObject, 10);
+                //Destroy(gameObject, 30);
                 Debug.Log("Enemy hit" + other.gameObject.name);
+                corpseFlame.SetActive(true);
             }
         }
 
