@@ -91,9 +91,9 @@ public class player_movement : MonoBehaviour
         {
             rb.AddRelativeForce(Vector3.right * moveSpeed * horizontal);
             rb.AddRelativeForce(Vector3.forward * moveSpeed * vertical);
-            if (rb.velocity.magnitude > maxForwardSpeed)
+            if (rb.linearVelocity.magnitude > maxForwardSpeed)
             {
-                rb.velocity = rb.velocity.normalized * maxForwardSpeed;
+                rb.linearVelocity = rb.linearVelocity.normalized * maxForwardSpeed;
             }
         }
         if (playerInput.actions["Move"].IsPressed())
